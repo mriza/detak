@@ -1,0 +1,41 @@
+<!-- templates/dashboard.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heartbeat Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Service Status Dashboard</h1>
+    <div class="status-grid">
+        {% for service in services %}
+        <div class="status-card status-{{ service.status }}">
+            <div class="guid">{{ service._id }}</div>
+            <div class="object-name">
+                {{ service.objectName }}
+            </div>
+            <div class="status">
+                {{ service.status|upper }} 
+                <span class="status-indicator status-{{ service.status }}">●</span>
+            </div>
+            <div class="last-heartbeat">
+                Last heartbeat: {{ service.lastHeartbeat|datetimeformat }}
+            </div>
+            <div class="uptime">
+                24h Uptime: {{ service.uptime }}%
+            </div>
+            <div class="status-bar">
+                {% for minute_status in service.minuteStatuses %}
+                <div class="status-{{ minute_status }}"></div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Auto-refresh every 30 seconds
+        setTimeout(() => location.reload(), 30000)
+    </script>
+</body>
+</html>
